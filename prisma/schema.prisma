@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  username  String    @unique
+  email     String    @unique
+  password  String
+  role      String    @default("viewer")
+  createdAt DateTime  @default(now()) @map("created_at")
+  posts     Post[]
+  comments  Comment[]
+
+  @@map("users")
+}
+
+model Post {
+  id         Int       @id @default(autoincrement())
+  title      String
+  content    String
+  status     String    @default("draft")
+  authorId   Int
+  author     User      @relation(fields: [authorId], references: [id])
+  categoryId Int
+  category   Category  @relation(fields: [categoryId], references: [id])
+  tags       Tag[]
+  comments   Comment[]
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  @@map("posts")
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  slug  String @unique
+  posts Post[]
+
+  @@map("categories")
+}
+
+model Tag {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  slug  String @unique
+  posts Post[]
+
+  @@map("tags")
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  text      String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  postId    Int
+  post      Post     @relation(fields: [postId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("comments")
+}
