@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import app from './src/app'
 
 app.listen({ port: 3000 }, (err) => {

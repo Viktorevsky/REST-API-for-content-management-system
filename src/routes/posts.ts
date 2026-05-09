@@ -1,29 +1,18 @@
-import  app  from '../app'
+import { FastifyInstance } from 'fastify';
+import prisma from '../lib/prisma'
 
-type Post = { id: number; title: string; content: string }
-
-
-
-let posts: Post[] = [
-  { id: 1, title: 'First Post', content: 'This is the first post.' },
-  { id: 2, title: 'Second Post', content: 'This is the second post.' },
-  { id: 3, title: 'Third Post', content: 'This is the third post.' }
-]
-
-
-
+export default async function(app: FastifyInstance){
 app.get('/posts', async (request, reply) => {
-  return posts
+  return await prisma.post.findMany()
 })
-
 
 app.post('/posts', async (request, reply) => {
-  let { title, content } = request.body as { title?: string; content?: string }
-  if(!title || !content){
-    return reply.status(400).send({ error: 'Title and content are required' })  
+  let { title, content,authorId ,categoryId } = request.body as { 
+    title?: string; content?: string; authorId?: number; categoryId?: number }
+  if(!title || !content || !authorId || !categoryId) {
+    return reply.status(400).send({ error: 'All fields are required' })  
   }
-  let newPost = { 
-  id: posts.length ? posts[posts.length - 1].id + 1 : 1, title, content }
-  posts.push(newPost)
-  return newPost
+  let newPost = await prisma.post.create({data: { title, content, authorId ,categoryId}})
+  return reply.status(201).send(newPost)
 })
+}
