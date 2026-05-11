@@ -1,9 +1,20 @@
 import { FastifyInstance } from 'fastify'
 import prisma from '../lib/prisma'
-import bcrypt from 'bcrypt'
+import authenticate from '../hooks/authenticate'
+
+
+type JwtUser = {
+  id: number
+  email: string
+  role: string
+}
 
 export default async function(app: FastifyInstance){
-  app.get('/users', async (request, reply) => {
+  app.get('/users',{preHandler: authenticate}, async (request, reply) => {
+    const user = request.user as JwtUser
+    if(user.role !== 'admin') {
+      return reply.status(403).send({ error: 'Forbidden' })
+    }   
    return await prisma.user.findMany({
     select: {
     id: true,
@@ -14,22 +25,4 @@ export default async function(app: FastifyInstance){
     }
    })
  })
-
-app.post('/users', async (request, reply) => {
-  const { username, email, password } = request.body as { 
-    username?: string
-    email?: string  
-    password?: string
-  }
-
-  if(!username || !email || !password) {
-  return reply.status(400).send({ error: 'All fields are required' })
-}
-let hashedPassword = await bcrypt.hash(password, 10)
-const newUser = await prisma.user.create({
-  data: { username, email, password: hashedPassword }
-})
-
-return reply.status(201).send(newUser)
-})
 }

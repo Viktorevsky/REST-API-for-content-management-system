@@ -4,14 +4,14 @@ import bcrypt from "bcrypt";
 
 export default async function auth(app: FastifyInstance) {
   app.post("/auth/login", async (request, reply) => {
-    const { username,email, password } = request.body as {
+    const { email, password } = request.body as {
       username?: string;
       email?: string;
       password?: string;
     };
 
-    if (!email || !password || !username) {
-      return reply.status(400).send({ error: "Email, username, and password are required" });
+    if (!email || !password) {
+      return reply.status(400).send({ error: "Email and password are required" });
     }
 
     const user = await prisma.user.findUnique({ where: { email } });
@@ -59,3 +59,4 @@ export default async function auth(app: FastifyInstance) {
 
     return reply.send({ accessToken: token });
 })
+}
