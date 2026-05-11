@@ -3,7 +3,8 @@ import jwt from '@fastify/jwt'
 import posts from './routes/posts'
 import users from './routes/users'
 import auth from './routes/auth'
-import authenticate from './hooks/authenticate'
+import { ZodError } from 'zod'
+
 const app = Fastify({logger: true})
 
 app.register(jwt, {
@@ -11,6 +12,15 @@ app.register(jwt, {
 })
 
 
+app.setErrorHandler((error, request, reply) => {
+  if (error instanceof ZodError) {
+    return reply.status(400).send({ 
+      error: 'Validation error',
+      details: error.issues
+    })
+  }
+  reply.status(500).send({ error: 'Internal Server Error' })
+})
 
 app.get('/', async (request, reply) => {
   return { status: 'ok' }
