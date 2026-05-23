@@ -21,6 +21,7 @@
     "fastify": "^5.8.5",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.20.0",
+    "slugify": "^1.6.9",
     "zod": "^4.4.3"
   },
   "devDependencies": {

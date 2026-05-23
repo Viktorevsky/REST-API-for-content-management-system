@@ -33,15 +33,15 @@ export default async function(app: FastifyInstance) {
     const comment = await prisma.comment.findUnique({ 
         where: { id: Number(id) } 
     })
-  if (!comment) {
-    return reply.status(404).send({ error: 'Comment not found' })
-  }
-
-  if (comment.userId !== currentUser.id && currentUser.role !== 'admin') {
-  return reply.status(403).send({ error: 'Forbidden' })
+    if (!comment) {
+        return reply.status(404).send({ error: 'Comment not found' })
     }
 
-  await prisma.comment.delete({ where: { id: Number(id) } })
-  return reply.status(204).send()
+    if (comment.userId !== currentUser.id && currentUser.role !== 'admin') {
+        return reply.status(403).send({ error: 'Forbidden' })
+    }
+
+    await prisma.comment.delete({ where: { id: Number(id) } })
+    return reply.status(204).send()
 })
 }

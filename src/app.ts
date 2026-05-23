@@ -4,6 +4,9 @@ import posts from './routes/posts'
 import users from './routes/users'
 import auth from './routes/auth'
 import { ZodError } from 'zod'
+import categories from './routes/categories'
+import comments from './routes/comments'
+import tags from './routes/tags'
 
 const app = Fastify({logger: true})
 
@@ -29,4 +32,8 @@ app.get('/', async (request, reply) => {
 app.register(users)
 app.register(posts)
 app.register(auth)
+app.register(categories)
+app.register(comments)
+app.register(tags)
+
 export default app
