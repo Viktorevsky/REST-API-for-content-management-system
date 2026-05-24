@@ -1,22 +1,20 @@
-import { describe, it, expect, beforeEach, afterAll } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import app from '../app'
-import prisma from '../lib/prisma'
-import { registerAndLogin, createCategory } from './helpers'
+import { registerAndLogin, createTag } from './helpers'
 
-
-describe('GET /categories', () => {
+describe('GET /tags', () => {
   it('should return 200', async () => {
-    const response = await app.inject({ method: 'GET', url: '/categories' })
+    const response = await app.inject({ method: 'GET', url: '/tags' })
     expect(response.statusCode).toBe(200)
   })
 })
 
-describe('POST /categories', () => {
+describe('POST /tags', () => {
   it('should return 401 without token', async () => {
     const response = await app.inject({
       method: 'POST',
-      url: '/categories',
-      payload: { name: 'Backend' }
+      url: '/tags',
+      payload: { name: 'Node.js' }
     })
     expect(response.statusCode).toBe(401)
   })
@@ -25,9 +23,9 @@ describe('POST /categories', () => {
     const token = await registerAndLogin('viewer@test.com', 'viewer', 'viewer')
     const response = await app.inject({
       method: 'POST',
-      url: '/categories',
+      url: '/tags',
       headers: { authorization: `Bearer ${token}` },
-      payload: { name: 'Backend' }
+      payload: { name: 'Node.js' }
     })
     expect(response.statusCode).toBe(403)
   })
@@ -36,52 +34,52 @@ describe('POST /categories', () => {
     const token = await registerAndLogin('admin@test.com', 'admin', 'admin')
     const response = await app.inject({
       method: 'POST',
-      url: '/categories',
+      url: '/tags',
       headers: { authorization: `Bearer ${token}` },
-      payload: { name: 'Backend' }
+      payload: { name: 'Node.js' }
     })
     expect(response.statusCode).toBe(201)
   })
 })
 
-describe('GET /categories/:id', () => {
+describe('GET /tags/:id', () => {
   it('should return 404 if not found', async () => {
-    const response = await app.inject({ method: 'GET', url: '/categories/999' })
+    const response = await app.inject({ method: 'GET', url: '/tags/999' })
     expect(response.statusCode).toBe(404)
   })
 })
 
-describe('DELETE /categories/:id', () => {
+describe('DELETE /tags/:id', () => {
   it('should return 401 without token', async () => {
-    const category = await createCategory()
+    const tag = await createTag()
     const response = await app.inject({
       method: 'DELETE',
-      url: `/categories/${category.id}`
+      url: `/tags/${tag.id}`
     })
     expect(response.statusCode).toBe(401)
   })
 
   it('should return 204 if admin', async () => {
     const token = await registerAndLogin('admin@test.com', 'admin', 'admin')
-    const category = await createCategory()
+    const tag = await createTag()
     const response = await app.inject({
       method: 'DELETE',
-      url: `/categories/${category.id}`,
+      url: `/tags/${tag.id}`,
       headers: { authorization: `Bearer ${token}` }
     })
     expect(response.statusCode).toBe(204)
   })
 })
 
-describe('PUT /categories/:id', () => {
+describe('PUT /tags/:id', () => {
   it('should return 200 if admin', async () => {
     const token = await registerAndLogin('admin@test.com', 'admin', 'admin')
-    const category = await createCategory()
+    const tag = await createTag()
     const response = await app.inject({
       method: 'PUT',
-      url: `/categories/${category.id}`,
+      url: `/tags/${tag.id}`,
       headers: { authorization: `Bearer ${token}` },
-      payload: { name: 'Frontend' }
+      payload: { name: 'TypeScript' }
     })
     expect(response.statusCode).toBe(200)
   })

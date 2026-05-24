@@ -6,6 +6,7 @@ beforeEach(async () => {
   await prisma.post.deleteMany()
   await prisma.category.deleteMany()
   await prisma.user.deleteMany()
+  await prisma.tag.deleteMany()
 })
 
 afterAll(async () => {

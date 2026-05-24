@@ -1,29 +1,7 @@
 import { describe, it, expect} from 'vitest'
 import app from '../app'
-import prisma from '../lib/prisma'
+import { registerAndLogin, createCategory } from './helpers'
 
-async function registerAndLogin(email = 'test@test.com', username = 'testuser', role = 'viewer') {
-  const bcrypt = (await import('bcrypt')).default
-  const hashedPassword = await bcrypt.hash('123456', 10)
-
-  await prisma.user.create({
-    data: { username, email, password: hashedPassword, role }
-  })
-
-  const loginRes = await app.inject({
-    method: 'POST',
-    url: '/auth/login',
-    payload: { email, password: '123456' }
-  })
-
-  return loginRes.json().accessToken
-}
-
-async function createCategory() {
-  return await prisma.category.create({
-    data: { name: 'Backend', slug: 'backend' }
-  })
-}
 
 describe('GET /posts', () => {
   it('should return 200', async () => {
