@@ -1,5 +1,7 @@
 import Fastify from 'fastify'
 import jwt from '@fastify/jwt'
+import swagger from '@fastify/swagger'
+import swaggerUi from '@fastify/swagger-ui'
 import posts from './routes/posts'
 import users from './routes/users'
 import auth from './routes/auth'
@@ -8,16 +10,38 @@ import categories from './routes/categories'
 import comments from './routes/comments'
 import tags from './routes/tags'
 
-const app = Fastify({logger: true})
+const app = Fastify({ logger: true })
+
+app.register(swagger, {
+  openapi: {
+    info: {
+      title: 'CMS API',
+      description: 'REST API для системы управления контентом',
+      version: '1.0.0'
+    },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT'
+        }
+      }
+    }
+  }
+})
+
+app.register(swaggerUi, {
+  routePrefix: '/docs'
+})
 
 app.register(jwt, {
   secret: process.env.JWT_SECRET!
 })
 
-
 app.setErrorHandler((error, request, reply) => {
   if (error instanceof ZodError) {
-    return reply.status(400).send({ 
+    return reply.status(400).send({
       error: 'Validation error',
       details: error.issues
     })
