@@ -5,6 +5,7 @@ services:
       - "3000:3000"
     env_file:
       - .env
+    restart: always
     depends_on:
       db:
         condition: service_healthy
@@ -15,6 +16,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: cms
+    restart: always
     ports:
       - "5433:5432"
     volumes:
