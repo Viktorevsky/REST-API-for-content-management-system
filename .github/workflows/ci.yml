@@ -61,7 +61,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/viktor/REST-API-for-content-management-system
+            cd /root/REST-API-for-content-management-system
             git pull
             docker compose down
             docker compose up -d --build
