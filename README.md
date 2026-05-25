@@ -1,8 +1,8 @@
 # CMS REST API
 
-REST API для системы управления контентом с JWT авторизацией, ролевой моделью доступа и автоматическим деплоем.
+A REST API for a content management system with JWT authentication, role-based access control, and automated deployment.
 
-## Стек
+## Tech Stack
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
 ![Fastify](https://img.shields.io/badge/Fastify-000000?style=flat&logo=fastify&logoColor=white)
@@ -11,98 +11,98 @@ REST API для системы управления контентом с JWT а
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
 ![Vitest](https://img.shields.io/badge/Vitest-6E9F18?style=flat&logo=vitest&logoColor=white)
 
-## Запуск
+## Getting Started
 
 ```bash
-git clone https://github.com/твой_юзернейм/твой_репозиторий.git
-cd твой_репозиторий
+git clone https://github.com/your_username/your_repository.git
+cd your_repository
 cp .env.example .env
-# Заполни JWT_SECRET в .env
+# Fill in JWT_SECRET in .env
 docker compose up
 ```
 
-## Переменные окружения
+## Environment Variables
 
-| Переменная | Описание |
+| Variable | Description |
 |---|---|
-| `DATABASE_URL` | Строка подключения к PostgreSQL |
-| `JWT_SECRET` | Секрет для подписи JWT токенов |
+| `DATABASE_URL` | PostgreSQL connection string |
+| `JWT_SECRET` | Secret key for signing JWT tokens |
 
-## API
+## API Endpoints
 
 ### Auth
-| Метод | Endpoint | Описание |
+| Method | Endpoint | Description |
 |---|---|---|
-| POST | `/auth/register` | Регистрация |
-| POST | `/auth/login` | Вход |
+| POST | `/auth/register` | Register a new user |
+| POST | `/auth/login` | Login |
 
 ### Posts
-| Метод | Endpoint | Описание | Доступ |
+| Method | Endpoint | Description | Access |
 |---|---|---|---|
-| GET | `/posts` | Все посты | Публичный |
-| GET | `/posts/:id` | Пост по id | Публичный |
-| POST | `/posts` | Создать пост | Авторизован |
-| PUT | `/posts/:id` | Обновить пост | Автор / Admin |
-| DELETE | `/posts/:id` | Удалить пост | Автор / Admin |
+| GET | `/posts` | Get all posts | Public |
+| GET | `/posts/:id` | Get post by id | Public |
+| POST | `/posts` | Create a post | Authenticated |
+| PUT | `/posts/:id` | Update a post | Author / Admin |
+| DELETE | `/posts/:id` | Delete a post | Author / Admin |
 
 ### Categories
-| Метод | Endpoint | Описание | Доступ |
+| Method | Endpoint | Description | Access |
 |---|---|---|---|
-| GET | `/categories` | Все категории | Публичный |
-| GET | `/categories/:id` | Категория по id | Публичный |
-| POST | `/categories` | Создать категорию | Admin |
-| PUT | `/categories/:id` | Обновить категорию | Admin |
-| DELETE | `/categories/:id` | Удалить категорию | Admin |
+| GET | `/categories` | Get all categories | Public |
+| GET | `/categories/:id` | Get category by id | Public |
+| POST | `/categories` | Create a category | Admin |
+| PUT | `/categories/:id` | Update a category | Admin |
+| DELETE | `/categories/:id` | Delete a category | Admin |
 
 ### Tags
-| Метод | Endpoint | Описание | Доступ |
+| Method | Endpoint | Description | Access |
 |---|---|---|---|
-| GET | `/tags` | Все теги | Публичный |
-| GET | `/tags/:id` | Тег по id | Публичный |
-| POST | `/tags` | Создать тег | Admin |
-| PUT | `/tags/:id` | Обновить тег | Admin |
-| DELETE | `/tags/:id` | Удалить тег | Admin |
+| GET | `/tags` | Get all tags | Public |
+| GET | `/tags/:id` | Get tag by id | Public |
+| POST | `/tags` | Create a tag | Admin |
+| PUT | `/tags/:id` | Update a tag | Admin |
+| DELETE | `/tags/:id` | Delete a tag | Admin |
 
 ### Comments
-| Метод | Endpoint | Описание | Доступ |
+| Method | Endpoint | Description | Access |
 |---|---|---|---|
-| GET | `/comments` | Все комментарии | Публичный |
-| POST | `/comments` | Создать комментарий | Авторизован |
-| DELETE | `/comments/:id` | Удалить комментарий | Автор / Admin |
+| GET | `/comments` | Get all comments | Public |
+| POST | `/comments` | Create a comment | Authenticated |
+| DELETE | `/comments/:id` | Delete a comment | Author / Admin |
 
 ### Users
-| Метод | Endpoint | Описание | Доступ |
+| Method | Endpoint | Description | Access |
 |---|---|---|---|
-| GET | `/users` | Все пользователи | Admin |
+| GET | `/users` | Get all users | Admin |
 
-## Тесты
+## Testing
 
 ```bash
 npm run test
 npm run test:coverage
 ```
 
-Покрытие — 82%
+Test coverage — 82%
 
-## Документация
+## API Documentation
 
-После запуска доступна по адресу `http://localhost:3000/docs`
+After running the app, Swagger UI is available at `http://localhost:3000/docs`
 
-## Роли
+## Roles
 
-| Роль | Возможности |
+| Role | Permissions |
 |---|---|
-| `viewer` | Чтение, создание постов и комментариев |
-| `admin` | Полный доступ |
+| `viewer` | Read content, create posts and comments |
+| `admin` | Full access |
 
-## Структура проекта
+## Project Structure
 
 ```
 src/
 ├── hooks/        # authenticate, adminAuth
 ├── lib/          # prisma client
 ├── routes/       # auth, posts, categories, tags, comments, users
-├── schemas/      # Zod схемы валидации
-├── tests/        # тесты
+├── schemas/      # Zod validation schemas
+├── tests/        # integration tests
 └── app.ts
 ```
