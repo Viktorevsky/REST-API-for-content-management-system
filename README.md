@@ -2,10 +2,8 @@
 
 A production-ready REST API for a content management system built with modern TypeScript stack. Features JWT authentication, role-based access control, automated testing pipeline and continuous deployment to a live VPS.
 
-🌐 **Live API:** `http://163.245.216.161:3000
-`
-📖 **Swagger Docs:** `http://163.245.216.161:3000
-/docs`
+🌐 **Live API:** `http://163.245.216.161:3000`
+📖 **Swagger Docs:** `http://163.245.216.161:3000/docs`
 
 ## Tech Stack
 
